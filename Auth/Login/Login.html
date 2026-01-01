@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./Login.css">
+    <title>Questing | Login</title>
+  </head>
+  <body>
+    <section class="main">
+      <nav>
+        <a href="#"><span>Ques</span>ting</a>
+      </nav>
+      <h1>Login</h1>
+      <div class="form_wrapper">
+       <div class="wrapper">
+         <form onsubmit="submitLogin(event)">
+        <div>
+          <input type="email" placeholder="Enter your email..." class="LoginEmail"/>
+        </div>
+        <div>
+          <input type="password" placeholder="Enter your password..." class="LoginPassword"/>
+        </div>
+        <div>
+            <button type="submit" class="SubmitLogin">Submit</button>
+        </div>
+      </form>
+       </div>
+      </div>
+      <h6>Does'nt have an account? <a href="../SignUp/SignUp.html">SignUp</a></h6>
+      <footer>
+        <h6>&copy; all right reserve <span class="getTime"></span></h6>
+      </footer>
+    </section>
+    <script src="./Login.js"></script>
+  </body>
+</html>

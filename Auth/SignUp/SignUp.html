@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./SignUp.css">
+    <title>Document</title>
+  </head>
+  <body>
+    <section class="main">
+      <nav>
+        <a href="#"><span>Ques</span>ting</a>
+      </nav>
+      <h1>Sign Up</h1>
+      <div class="form_wrapper">
+       <div class="wrapper">
+         <form onsubmit="submitNewUser(event)">
+        <div>
+          <input type="text" placeholder="Enter your name..." class="SignUpUserName"/>
+        </div>
+        <div>
+          <input type="email" placeholder="Enter your email..." class="SignUpEmail"/>
+        </div>
+        <div>
+          <input type="password" placeholder="Enter your password..." class="SignUpUserPassword"/>
+        </div>
+        <div>
+            <button type="submit" class="SubmitSignup">Submit</button>
+        </div>
+      </form>
+       </div>
+      </div>
+      <h6>Already having an account? <a href="../Login/Login.html">Login</a></h6>
+      <footer>
+        <h6>&copy; all right reserve <span class="getTime"></span></h6>
+      </footer>
+    </section>
+    <script src="./SignUp.js"></script>
+  </body>
+</html>

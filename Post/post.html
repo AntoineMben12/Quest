@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>All Posts - Questing</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="./post_display.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ADFF2F", // GreenYellow
+                        "primary-dark": "#9ACD32", // YellowGreen
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1b2210",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#262f18",
+                        "text-main": "#161b0d",
+                        "text-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        display: ["Spline Sans", "sans-serif"],
+                        body: ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #374151;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased overflow-x-hidden selection:bg-primary selection:text-black">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-30 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl">article</span>
+                <h1 class="text-2xl font-bold text-text-main dark:text-white">Questing Posts</h1>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-2xl mx-8 hidden md:block">
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                    <input type="text" id="search-input" placeholder="Search posts by keywords..."
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border-none bg-background-light dark:bg-background-dark text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500" />
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-3">
+                <a href="../index.html"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">home</span>
+                    <span class="hidden sm:inline">Home</span>
+                </a>
+                <a href="../Dashboard/Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-black font-semibold hover:bg-primary-dark transition-colors">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="hidden sm:inline">Dashboard</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Mobile Search Bar -->
+        <div class="px-4 pb-4 md:hidden">
+            <div class="relative">
+                <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                <input type="text" id="search-input-mobile" placeholder="Search posts..."
+                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-none bg-background-light dark:bg-background-dark text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500" />
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm">
+                <p class="text-4xl font-bold text-primary mb-2" id="total-posts-count">0</p>
+                <p class="text-sm font-medium text-gray-500">Total Posts</p>
+            </div>
+            <div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm">
+                <p class="text-4xl font-bold text-primary mb-2" id="total-likes-all">0</p>
+                <p class="text-sm font-medium text-gray-500">Total Likes</p>
+            </div>
+            <div
+                class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm sm:col-span-2 lg:col-span-1">
+                <p class="text-4xl font-bold text-primary mb-2" id="displayed-count">0</p>
+                <p class="text-sm font-medium text-gray-500">Displayed Posts</p>
+            </div>
+        </div>
+
+        <!-- Posts Grid -->
+        <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Posts will be loaded here dynamically -->
+            <div class="col-span-full text-center py-12">
+                <div
+                    class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
+                </div>
+                <p class="mt-4 text-gray-500">Loading posts...</p>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden text-center py-12">
+            <span class="material-symbols-outlined text-gray-400 text-6xl mb-4">search_off</span>
+            <p class="text-xl text-gray-500">No posts found matching your search</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 bg-surface-light dark:bg-surface-dark text-center py-6 text-sm text-gray-500">
+        <p>&copy; All rights reserved <span id="current-year"></span> - Questing</p>
+    </footer>
+
+</body>
+
+</html>

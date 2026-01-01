@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Dashboard - Questing</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="./Dashboard.js"></script>
+  <script src="./Post.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ADFF2F", // GreenYellow
+            "primary-dark": "#9ACD32", // YellowGreen
+            "background-light": "#f7f8f6",
+            "background-dark": "#1b2210",
+            "surface-light": "#ffffff",
+            "surface-dark": "#262f18",
+            "text-main": "#161b0d",
+            "text-light": "#ffffff",
+          },
+          fontFamily: {
+            display: ["Spline Sans", "sans-serif"],
+            body: ["Noto Sans", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #e5e7eb;
+      border-radius: 10px;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #374151;
+    }
+
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased overflow-x-hidden selection:bg-primary selection:text-black">
+  <input class="peer hidden" id="drawer-toggle" type="checkbox" />
+  <label
+    class="fixed inset-0 z-40 hidden h-full w-full bg-black/40 backdrop-blur-sm transition-opacity peer-checked:block lg:hidden"
+    for="drawer-toggle"></label>
+  <aside
+    class="fixed left-0 top-0 z-50 h-full w-80 -translate-x-full transform bg-surface-light dark:bg-surface-dark shadow-2xl transition-transform duration-300 ease-in-out peer-checked:translate-x-0 lg:hidden">
+    <div class="flex h-full flex-col p-6">
+      <div class="mb-8 flex items-center justify-between">
+        <h2 class="text-2xl font-bold tracking-tight text-text-main dark:text-white">
+          Menu
+        </h2>
+        <label class="cursor-pointer rounded-full p-2 hover:bg-gray-100 dark:hover:bg-white/10" for="drawer-toggle">
+          <span class="material-symbols-outlined">close</span>
+        </label>
+      </div>
+      <div class="mb-8 flex items-center gap-4 rounded-xl bg-background-light dark:bg-background-dark p-4">
+        <div class="h-12 w-12 rounded-full bg-cover bg-center" data-alt="User Avatar" style="
+              background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDYsxt6S5brcbQGhrtBf7IGgdzyngKfJxX3uoiOTWqIuuh8_gYKdy4iwe74O1q_i8Lm-gInrcrI252MFCSP5DzYjd6pSd7Ve0Pnf79CjdGyvmPu2zMvt6JLlLEyqtbGsR3bj9w0rzIg3e2DfllP3rjZOnr5MAE55YNSKlwmOIQvSxPYmhodWfBgRPv9rdok3NzfkaJoRKmg7iDTlrFDj3mMboWIO1PmvsTU4kG2rpbNcHS4GjMV_0NKbesEGs_s4GLFjOCOSKYJM3HO');
+            "></div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm" id="profile-name"></span>
+          <span class="text-xs text-gray-500 dark:text-gray-400" id="profile-id"></span>
+        </div>
+      </div>
+      <nav class="flex-1 space-y-2">
+        <a class="flex items-center gap-4 rounded-xl bg-primary px-4 py-3 font-bold text-black shadow-sm transition-transform active:scale-95"
+          href="#">
+          <span class="material-symbols-outlined">dashboard</span>
+          Dashboard
+        </a>
+        <a class="flex items-center gap-4 rounded-xl px-4 py-3 font-medium text-text-main dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+          href="../Post/post.html">
+          <span class="material-symbols-outlined">post_add</span>
+          Posts
+        </a>
+        <a class="flex items-center gap-4 rounded-xl px-4 py-3 font-medium text-text-main dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+          href="https://antoine-mben.onrender.com/">
+          <span class="material-symbols-outlined">feedback</span>
+          Feedback
+        </a>
+        <a class="flex items-center gap-4 rounded-xl px-4 py-3 font-medium text-text-main dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+          href="../index.html">
+          <span class="material-symbols-outlined">Home</span>
+          Home
+        </a>
+      </nav>
+      <button
+        class="mt-auto flex w-full items-center justify-center gap-2 rounded-xl border-2 border-red-500/20 bg-red-500/10 py-4 font-bold text-red-600 dark:text-red-400 hover:bg-red-500 hover:text-white transition-colors"
+        onclick="logout()">
+        <span class="material-symbols-outlined">logout</span>
+        Logout
+      </button>
+    </div>
+  </aside>
+  <div class="flex min-h-screen flex-col">
+    <header
+      class="sticky top-0 z-30 flex items-center justify-between bg-surface-light/90 dark:bg-background-dark/90 px-4 py-4 backdrop-blur-md transition-colors">
+      <div class="flex items-center gap-2">
+        <label
+          class="cursor-pointer rounded-lg p-2 text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 active:scale-95 transition-all"
+          for="drawer-toggle">
+          <span class="material-symbols-outlined !text-[28px]">menu</span>
+        </label>
+      </div>
+      <h1 class="text-lg font-bold tracking-tight text-text-main dark:text-white">
+        Dashboard
+      </h1>
+      <div class="flex w-10 justify-end">
+        <button
+          class="relative rounded-full p-2 text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined">contact</span>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-black"></span>
+        </button>
+      </div>
+    </header>
+    <main class="flex-1 px-4 pb-24 pt-2">
+      <section
+        class="mb-6 overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors">
+        <div class="relative h-24 bg-gradient-to-r from-gray-800 to-black dark:from-[#334020] dark:to-[#1b2210]">
+          <div class="absolute inset-0 opacity-20" style="
+                background-image: radial-gradient(#adff2f 1px, transparent 1px);
+                background-size: 20px 20px;
+              "></div>
+        </div>
+        <div class="relative px-5 pb-5">
+          <div class="absolute -top-10 left-5">
+            <div
+              class="h-20 w-20 rounded-2xl border-4 border-surface-light dark:border-surface-dark bg-cover bg-center shadow-lg"
+              id="profile-avatar" data-alt="User profile picture" style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxOapnVrmMEGagXmJI4Si_3nOyBHnEEuFvzGe5o2eimTLWLElErD2sQhkOeLMYDd1pjrm8th06K6ljhMGPn-YHnYqIhixUQAjdLoDbiBh6lkwYXSPEvSpRgWARrPb0SuwP_Lh6MWovX9gS5x6TqahrUUbgQphlJOnhVnB5IXzpMGOG_IUVrYu0Z9FNMZTmWOWHfAj9aQxpyU9nYRRucDA9tVV5XYnoYAhtSsyic-Pf3MkLOOFKdzDTZbjgfjttcgA41L567XDqRIhC');
+                "></div>
+          </div>
+          <div class="flex justify-end pt-3">
+            <span class="rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary-dark dark:text-primary"
+              id="user-badge"></span>
+          </div>
+          <div class="mt-2">
+            <h2 class="text-xl font-bold text-text-main dark:text-white" id="profile-heading">
+
+            </h2>
+            </h2>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400" id="profile-email">
+
+            </p>
+          </div>
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-background-light dark:bg-background-dark p-3 text-center">
+              <p class="text-2xl font-bold text-text-main dark:text-white" id="active-posts-count">
+                0
+              </p>
+              <p class="text-xs font-medium text-gray-500">Active Posts</p>
+            </div>
+            <div class="rounded-xl bg-background-light dark:bg-background-dark p-3 text-center">
+              <p class="text-2xl font-bold text-text-main dark:text-white" id="total-likes-count">
+                0
+              </p>
+              <p class="text-xs font-medium text-gray-500">Total Likes</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="mb-8">
+        <div
+          class="rounded-2xl bg-surface-light dark:bg-surface-dark p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] dark:shadow-none">
+          <h3 class="mb-4 text-lg font-bold text-text-main dark:text-white">
+            Create New Post
+          </h3>
+          <div class="flex flex-col gap-3">
+            <div class="relative">
+              <input
+                class="w-full rounded-xl border-none bg-background-light dark:bg-background-dark px-4 py-4 text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500"
+                placeholder="Post Title (max 100 characters)" type="text" id="post-title" maxlength="100" />
+            </div>
+            <div class="relative">
+              <input
+                class="w-full rounded-xl border-none bg-background-light dark:bg-background-dark px-4 py-4 text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500"
+                placeholder="What's happening?" type="text" id="post-content" />
+            </div>
+            <div class="flex items-center justify-between mt-1">
+              <div class="flex gap-1 text-gray-400">
+                <button
+                  class="rounded-full p-2 hover:bg-gray-100 hover:text-primary transition-colors dark:hover:bg-white/10">
+                  <span class="material-symbols-outlined text-[20px]">image</span>
+                </button>
+                <button
+                  class="rounded-full p-2 hover:bg-gray-100 hover:text-primary transition-colors dark:hover:bg-white/10">
+                  <span class="material-symbols-outlined text-[20px]">tag</span>
+                </button>
+                <button
+                  class="rounded-full p-2 hover:bg-gray-100 hover:text-primary transition-colors dark:hover:bg-white/10">
+                  <span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+                </button>
+              </div>
+              <button
+                class="rounded-xl bg-primary px-6 py-2.5 font-bold text-black shadow-lg shadow-primary/20 hover:bg-primary-dark active:scale-95 transition-all">
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="mb-4 flex items-center justify-between px-1">
+          <h3 class="text-lg font-bold text-text-main dark:text-white">
+            Recent Posts
+          </h3>
+          <a href="../Post/post.html" class="text-sm font-semibold text-primary-dark dark:text-primary hover:underline">
+            View All
+          </a>
+        </div>
+        <div class="flex flex-col gap-3">
+          <!-- Posts will be dynamically loaded here by Post.js -->
+        </div>
+      </section>
+    </main>
+    <div class="h-6 w-full bg-background-light dark:bg-background-dark"></div>
+    <footer class="bg-surface-light dark:bg-surface-dark text-center py-4 text-sm text-gray-500">
+      <h6>&copy; all right reserved <span class="getTime"></span></h6>
+    </footer>
+  </div>
+</body>
+
+</html>

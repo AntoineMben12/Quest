@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Home - Questing</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ADFF2F",
+                        "primary-dark": "#9ACD32",
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1b2210",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#262f18",
+                        "text-main": "#161b0d",
+                        "text-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        display: ["Spline Sans", "sans-serif"],
+                        body: ["Noto Sans", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased">
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10" style="
+        background-image: radial-gradient(#adff2f 1px, transparent 1px);
+        background-size: 30px 30px;
+      "></div>
+
+        <div class="relative z-10 text-center max-w-4xl mx-auto">
+            <!-- Logo/Icon -->
+            <div class="mb-8 flex justify-center">
+                <div
+                    class="h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-2xl shadow-primary/20">
+                    <span class="material-symbols-outlined text-white text-5xl">article</span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-6xl md:text-7xl font-bold mb-6 text-text-main dark:text-white">
+                Welcome to <span class="text-primary">Questing</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+                Share your thoughts, connect with others, and explore amazing content from our community
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="../Post/post.html"
+                    class="px-8 py-4 rounded-xl bg-primary text-black font-bold text-lg shadow-lg shadow-primary/20 hover:bg-primary-dark active:scale-95 transition-all">
+                    <span class="flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">explore</span>
+                        Explore Posts
+                    </span>
+                </a>
+                <a href="../Dashboard/Dashboard.html"
+                    class="px-8 py-4 rounded-xl bg-surface-light dark:bg-surface-dark text-text-main dark:text-white font-bold text-lg border-2 border-primary/20 hover:border-primary transition-all">
+                    <span class="flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        Go to Dashboard
+                    </span>
+                </a>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
+                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">create</span>
+                    <h3 class="font-bold text-lg mb-2">Create Posts</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Share your ideas and stories with the community
+                    </p>
+                </div>
+                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">favorite</span>
+                    <h3 class="font-bold text-lg mb-2">Like & Engage</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Support posts you love and connect with others
+                    </p>
+                </div>
+                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
+                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">search</span>
+                    <h3 class="font-bold text-lg mb-2">Discover Content</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Find posts that match your interests easily</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-surface-light dark:bg-surface-dark text-center py-6 text-sm text-gray-500">
+        <p>&copy; All rights reserved <span id="current-year"></span> - Questing</p>
+    </footer>
+
+    <script>
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
+
+</body>
+
+</html>
