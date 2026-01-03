@@ -414,6 +414,138 @@ app.put("/api/posts/:post_id/like", async (req, res) => {
   }
 });
 
+// Comment API endpoints
+// Create a comment on a post
+app.post("/api/comments", async (req, res) => {
+  try {
+    const { post_id, user_id, comment_text } = req.body;
+
+    // Validation
+    if (!post_id || !user_id || !comment_text) {
+      return res.status(400).json({ message: "All fields are required!" });
+    }
+
+    if (comment_text.trim().length === 0) {
+      return res.status(400).json({ message: "Comment cannot be empty!" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+      // Check if post exists
+      const [postCheck] = await connection.execute(
+        "SELECT post_id FROM post WHERE post_id = ?",
+        [post_id]
+      );
+
+      if (postCheck.length === 0) {
+        return res.status(404).json({ message: "Post not found!" });
+      }
+
+      // Insert comment
+      const [result] = await connection.execute(
+        "INSERT INTO post_comment (post_id, user_id, comment_text, created_at) VALUES (?, ?, ?, NOW())",
+        [post_id, user_id, comment_text.trim()]
+      );
+
+      console.log("Comment created with ID:", result.insertId);
+
+      res.status(201).json({
+        message: "Comment added successfully!",
+        comment_id: result.insertId,
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Create comment error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Get comments for a post
+app.get("/api/comments/:post_id", async (req, res) => {
+  try {
+    const { post_id } = req.params;
+
+    const connection = await pool.getConnection();
+
+    try {
+      const [comments] = await connection.execute(
+        `SELECT 
+          pc.comment_id,
+          pc.post_id,
+          pc.user_id,
+          pc.comment_text,
+          pc.created_at,
+          u.name
+        FROM post_comment pc
+        JOIN USERS u ON pc.user_id = u.id
+        WHERE pc.post_id = ?
+        ORDER BY pc.created_at DESC`,
+        [post_id]
+      );
+
+      res.status(200).json({
+        message: "Comments retrieved successfully!",
+        comments: comments,
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Get comments error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Delete a comment
+app.delete("/api/comments/:comment_id", async (req, res) => {
+  try {
+    const { comment_id } = req.params;
+    const { user_id } = req.body;
+
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID is required!" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+      // Check if comment exists and belongs to the user
+      const [commentCheck] = await connection.execute(
+        "SELECT user_id FROM post_comment WHERE comment_id = ?",
+        [comment_id]
+      );
+
+      if (commentCheck.length === 0) {
+        return res.status(404).json({ message: "Comment not found!" });
+      }
+
+      if (commentCheck[0].user_id !== parseInt(user_id)) {
+        return res.status(403).json({ message: "You can only delete your own comments!" });
+      }
+
+      // Delete comment
+      const [result] = await connection.execute(
+        "DELETE FROM post_comment WHERE comment_id = ?",
+        [comment_id]
+      );
+
+      console.log("Comment deleted with ID:", comment_id);
+
+      res.status(200).json({
+        message: "Comment deleted successfully!",
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Delete comment error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
 // Collaboration Post API endpoints
 // Create collaboration post
 app.post("/api/collaboration-posts", async (req, res) => {

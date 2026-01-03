@@ -86,7 +86,7 @@ function displayPosts(posts) {
           </div>
 
           <!-- Post Footer -->
-          <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700 mb-4">
             <div class="flex items-center gap-4">
               ${!isOwnPost && user
                     ? `
@@ -102,10 +102,39 @@ function displayPosts(posts) {
               </div>
               `
                 }
+              <button class="text-gray-400 hover:text-primary transition-colors flex items-center gap-1" onclick="toggleComments(${post.post_id})" title="View comments">
+                <span class="material-symbols-outlined">comment</span>
+                <span class="text-sm font-semibold" id="comment-count-${post.post_id}">0</span>
+              </button>
             </div>
             <span class="text-xs px-2 py-1 rounded bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold uppercase tracking-wide">
               Published
             </span>
+          </div>
+
+          <!-- Comments Section -->
+          <div id="comments-section-${post.post_id}" class="hidden">
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+              <!-- Comments List -->
+              <div id="comments-list-${post.post_id}" class="mb-4 max-h-64 overflow-y-auto">
+                <p class="text-sm text-gray-500 text-center py-2">Loading comments...</p>
+              </div>
+
+              <!-- Add Comment Form -->
+              ${user ? `
+              <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <textarea id="comment-input-${post.post_id}" placeholder="Add a comment..." maxlength="500"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark text-text-main dark:text-white placeholder-gray-400 text-sm focus:ring-2 focus:ring-primary focus:border-transparent resize-none" rows="2"></textarea>
+                <button onclick="submitComment(${post.post_id})" class="mt-2 px-4 py-2 rounded-lg bg-primary text-black font-semibold hover:bg-primary-dark transition-colors text-sm w-full">
+                  Post Comment
+                </button>
+              </div>
+              ` : `
+              <div class="text-center py-4">
+                <p class="text-sm text-gray-500"><a href="../Auth/Login/Login.html" class="text-primary hover:underline">Login</a> to comment</p>
+              </div>
+              `}
+            </div>
           </div>
         </article>
       `;
@@ -243,4 +272,158 @@ function setCurrentYear() {
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
     }
+}
+
+// Toggle comments section
+function toggleComments(postId) {
+    const section = document.getElementById(`comments-section-${postId}`);
+    if (section.classList.contains("hidden")) {
+        section.classList.remove("hidden");
+        loadComments(postId);
+    } else {
+        section.classList.add("hidden");
+    }
+}
+
+// Load comments for a post
+function loadComments(postId) {
+    fetch(`http://localhost:3000/api/comments/${postId}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const commentsList = document.getElementById(`comments-list-${postId}`);
+            const commentCount = document.getElementById(`comment-count-${postId}`);
+            const comments = data.comments || [];
+
+            // Update comment count
+            commentCount.textContent = comments.length;
+
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="text-sm text-gray-500 text-center py-2">No comments yet. Be the first to comment!</p>';
+                return;
+            }
+
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            commentsList.innerHTML = comments
+                .map((comment) => {
+                    const isOwnComment = user && comment.user_id === user.id;
+                    return `
+                    <div class="mb-3 pb-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                      <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1">
+                          <p class="text-sm font-semibold text-text-main dark:text-white">${comment.name}</p>
+                          <p class="text-xs text-gray-500 mb-1">${getTimeAgo(comment.created_at)}</p>
+                          <p class="text-sm text-gray-700 dark:text-gray-300">${escapeHtml(comment.comment_text)}</p>
+                        </div>
+                        ${isOwnComment ? `
+                        <button onclick="deleteComment(${comment.comment_id})" class="text-gray-400 hover:text-red-500 transition-colors" title="Delete comment">
+                          <span class="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                        ` : ''}
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("");
+        })
+        .catch((error) => {
+            console.error("Error loading comments:", error);
+            const commentsList = document.getElementById(`comments-list-${postId}`);
+            commentsList.innerHTML = '<p class="text-sm text-red-500 text-center py-2">Error loading comments</p>';
+        });
+}
+
+// Submit a new comment
+function submitComment(postId) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login to comment!");
+        window.location.href = "../Auth/Login/Login.html";
+        return;
+    }
+
+    const commentInput = document.getElementById(`comment-input-${postId}`);
+    const commentText = commentInput.value.trim();
+
+    if (!commentText) {
+        alert("Comment cannot be empty!");
+        return;
+    }
+
+    fetch("http://localhost:3000/api/comments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            post_id: postId,
+            user_id: user.id,
+            comment_text: commentText,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message.includes("successfully")) {
+                commentInput.value = "";
+                loadComments(postId);
+            } else {
+                alert(data.message || "Error posting comment!");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to post comment!");
+        });
+}
+
+// Delete a comment
+function deleteComment(commentId) {
+    if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login to delete comments!");
+        return;
+    }
+
+    fetch(`http://localhost:3000/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user_id: user.id,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message.includes("successfully")) {
+                // Find the post ID from the comment and reload comments
+                const allCommentSections = document.querySelectorAll('[id^="comments-list-"]');
+                allCommentSections.forEach((section) => {
+                    const postId = section.id.replace("comments-list-", "");
+                    loadComments(postId);
+                });
+            } else {
+                alert(data.message || "Error deleting comment!");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to delete comment!");
+        });
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+    };
+    return text.replace(/[&<>"']/g, (m) => map[m]);
 }
