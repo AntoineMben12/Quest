@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
 const path = require("path");
+const bcrypt = require("bcrypt");
 
 const app = express();
 const PORT = 3000;
@@ -56,10 +57,13 @@ app.post("/api/signup", async (req, res) => {
         return res.status(400).json({ message: "Email already registered!" });
       }
 
+      // Hash the password with bcrypt (10 salt rounds)
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       // Insert new user
       const [result] = await connection.execute(
         "INSERT INTO USERS (name, email, password) VALUES (?, ?, ?)",
-        [name, email, password]
+        [name, email, hashedPassword]
       );
 
       console.log("New user created:", name, "with ID:", result.insertId);
@@ -103,8 +107,10 @@ app.post("/api/login", async (req, res) => {
 
       const user = users[0];
 
-      // Simple password check (in production, use bcrypt!)
-      if (user.password !== password) {
+      // Compare password with hashed password using bcrypt
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      
+      if (!passwordMatch) {
         return res.status(401).json({ message: "Invalid email or password!" });
       }
 
