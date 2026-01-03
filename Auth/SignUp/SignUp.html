@@ -1,40 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./SignUp.css">
-    <title>Document</title>
-  </head>
-  <body>
-    <section class="main">
-      <nav>
-        <a href="#"><span>Ques</span>ting</a>
-      </nav>
-      <h1>Sign Up</h1>
-      <div class="form_wrapper">
-       <div class="wrapper">
-         <form onsubmit="submitNewUser(event)">
-        <div>
-          <input type="text" placeholder="Enter your name..." class="SignUpUserName"/>
-        </div>
-        <div>
-          <input type="email" placeholder="Enter your email..." class="SignUpEmail"/>
-        </div>
-        <div>
-          <input type="password" placeholder="Enter your password..." class="SignUpUserPassword"/>
-        </div>
-        <div>
-            <button type="submit" class="SubmitSignup">Submit</button>
-        </div>
-      </form>
-       </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Questing</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ADFF2F", // GreenYellow
+            "primary-dark": "#9ACD32", // YellowGreen
+            "background-light": "#f7f8f6",
+            "background-dark": "#1b2210",
+            "surface-light": "#ffffff",
+            "surface-dark": "#262f18",
+            "text-main": "#161b0d",
+            "text-light": "#ffffff",
+          },
+          fontFamily: {
+            display: ["Spline Sans", "sans-serif"],
+            body: ["Noto Sans", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="p-6 flex justify-center">
+    <a href="../index.html" class="text-2xl font-bold tracking-tight">
+      <span class="text-primary">Ques</span>ting
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-md bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-800">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold mb-2">Create Account</h1>
+        <p class="text-gray-500 dark:text-gray-400">Join our community today</p>
       </div>
-      <h6>Already having an account? <a href="../Login/Login.html">Login</a></h6>
-      <footer>
-        <h6>&copy; all right reserve <span class="getTime"></span></h6>
-      </footer>
-    </section>
-    <script src="./SignUp.js"></script>
-  </body>
+
+      <form onsubmit="submitNewUser(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Full Name</label>
+          <input type="text" placeholder="Enter your name..."
+            class="SignUpUserName w-full rounded-xl border-gray-200 dark:border-gray-700 bg-background-light dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Email</label>
+          <input type="email" placeholder="Enter your email..."
+            class="SignUpEmail w-full rounded-xl border-gray-200 dark:border-gray-700 bg-background-light dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Password</label>
+          <input type="password" placeholder="Create a password..."
+            class="SignUpUserPassword w-full rounded-xl border-gray-200 dark:border-gray-700 bg-background-light dark:bg-background-dark px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            required />
+        </div>
+
+        <button type="submit"
+          class="SubmitSignup w-full bg-primary text-black font-bold rounded-xl py-3 hover:bg-primary-dark active:scale-95 transition-all shadow-lg shadow-primary/20 mt-4">
+          Sign Up
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-gray-500">
+        Already have an account?
+        <a href="../Login/Login.html" class="font-bold text-primary-dark dark:text-primary hover:underline">Login</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-6 text-center text-sm text-gray-500">
+    <p>&copy; All rights reserved <span class="getTime"></span> - Questing</p>
+  </footer>
+
+  <script src="./SignUp.js"></script>
+  <script>
+    document.querySelector('.getTime').textContent = new Date().getFullYear();
+  </script>
+</body>
+
 </html>

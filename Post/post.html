@@ -77,33 +77,32 @@
     class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased overflow-x-hidden selection:bg-primary selection:text-black">
 
     <!-- Navigation Header -->
-    <header class="sticky top-0 z-30 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md shadow-sm">
+    <header
+        class="sticky top-0 z-30 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
         <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-3xl">article</span>
-                <h1 class="text-2xl font-bold text-text-main dark:text-white">Questing Posts</h1>
+                <a href="../index.html" class="flex items-center gap-2 group">
+                    <span
+                        class="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">article</span>
+                    <h1 class="text-2xl font-bold text-text-main dark:text-white">Questing</h1>
+                </a>
             </div>
 
             <!-- Search Bar -->
-            <div class="flex-1 max-w-2xl mx-8 hidden md:block">
-                <div class="relative">
+            <div class="flex-1 max-w-xl mx-8 hidden md:block">
+                <div class="relative group">
                     <span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                    <input type="text" id="search-input" placeholder="Search posts by keywords..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-xl border-none bg-background-light dark:bg-background-dark text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500" />
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">search</span>
+                    <input type="text" id="search-input" placeholder="Search posts..."
+                        class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-transparent text-base focus:ring-2 focus:ring-primary focus:border-transparent dark:text-white placeholder-gray-400 transition-all" />
                 </div>
             </div>
 
             <!-- Navigation Links -->
             <div class="flex items-center gap-3">
-                <a href="../index.html"
-                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                    <span class="material-symbols-outlined">home</span>
-                    <span class="hidden sm:inline">Home</span>
-                </a>
                 <a href="../Dashboard/Dashboard.html"
-                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-black font-semibold hover:bg-primary-dark transition-colors">
-                    <span class="material-symbols-outlined">dashboard</span>
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-700 text-text-main dark:text-white font-medium hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
                     <span class="hidden sm:inline">Dashboard</span>
                 </a>
             </div>
@@ -115,27 +114,26 @@
                 <span
                     class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
                 <input type="text" id="search-input-mobile" placeholder="Search posts..."
-                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border-none bg-background-light dark:bg-background-dark text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-500" />
+                    class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-transparent text-base focus:ring-2 focus:ring-primary dark:text-white placeholder-gray-400" />
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 max-w-6xl">
         <!-- Stats Section -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            <div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm">
-                <p class="text-4xl font-bold text-primary mb-2" id="total-posts-count">0</p>
-                <p class="text-sm font-medium text-gray-500">Total Posts</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+                <p class="text-3xl font-bold text-text-main dark:text-white mb-1" id="total-posts-count">0</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Total Posts</p>
             </div>
-            <div class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm">
-                <p class="text-4xl font-bold text-primary mb-2" id="total-likes-all">0</p>
-                <p class="text-sm font-medium text-gray-500">Total Likes</p>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+                <p class="text-3xl font-bold text-text-main dark:text-white mb-1" id="total-likes-all">0</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Total Likes</p>
             </div>
-            <div
-                class="rounded-2xl bg-surface-light dark:bg-surface-dark p-6 text-center shadow-sm sm:col-span-2 lg:col-span-1">
-                <p class="text-4xl font-bold text-primary mb-2" id="displayed-count">0</p>
-                <p class="text-sm font-medium text-gray-500">Displayed Posts</p>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-4 text-center">
+                <p class="text-3xl font-bold text-text-main dark:text-white mb-1" id="displayed-count">0</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Showing</p>
             </div>
         </div>
 
@@ -144,23 +142,32 @@
             <!-- Posts will be loaded here dynamically -->
             <div class="col-span-full text-center py-12">
                 <div
-                    class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent">
+                    class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-primary border-t-transparent">
                 </div>
-                <p class="mt-4 text-gray-500">Loading posts...</p>
+                <p class="mt-4 text-gray-500 font-medium">Loading posts...</p>
             </div>
         </div>
 
         <!-- No Results Message -->
         <div id="no-results" class="hidden text-center py-12">
-            <span class="material-symbols-outlined text-gray-400 text-6xl mb-4">search_off</span>
-            <p class="text-xl text-gray-500">No posts found matching your search</p>
+            <div
+                class="h-16 w-16 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="material-symbols-outlined text-gray-400 text-3xl">search_off</span>
+            </div>
+            <h3 class="text-lg font-bold text-text-main dark:text-white">No posts found</h3>
+            <p class="text-gray-500">Try adjusting your search terms</p>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="mt-16 bg-surface-light dark:bg-surface-dark text-center py-6 text-sm text-gray-500">
+    <footer
+        class="mt-auto border-t border-gray-100 dark:border-gray-800 bg-surface-light dark:bg-surface-dark text-center py-6 text-sm text-gray-500">
         <p>&copy; All rights reserved <span id="current-year"></span> - Questing</p>
     </footer>
+
+    <script>
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+    </script>
 
 </body>
 

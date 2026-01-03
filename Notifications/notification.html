@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Notifications - Questing</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ADFF2F", // GreenYellow
+                        "primary-dark": "#9ACD32", // YellowGreen
+                        "background-light": "#f7f8f6",
+                        "background-dark": "#1b2210",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#262f18",
+                        "text-main": "#161b0d",
+                        "text-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        display: ["Spline Sans", "sans-serif"],
+                        body: ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased overflow-x-hidden selection:bg-primary selection:text-black">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-30 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl">notifications</span>
+                <h1 class="text-2xl font-bold text-text-main dark:text-white">Notifications</h1>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-3">
+                <a href="../index.html"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">home</span>
+                    <span class="hidden sm:inline">Home</span>
+                </a>
+                <a href="../Dashboard/Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-black font-semibold hover:bg-primary-dark transition-colors">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="hidden sm:inline">Dashboard</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-3xl">
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-text-main dark:text-white mb-1">Your Activity Feed</h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Stay updated with team collaborations</p>
+            </div>
+            <button
+                class="text-sm text-primary-dark dark:text-primary font-semibold hover:underline px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                onclick="location.reload()">
+                <span class="material-symbols-outlined text-sm mr-1 align-middle">refresh</span>
+                Refresh
+            </button>
+        </div>
+
+        <div class="space-y-4" id="notifications-container">
+            <!-- Loading skeleton (initially shown) -->
+            <div id="loading-skeleton" class="space-y-4">
+                <div
+                    class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl shadow-sm flex gap-4 items-start border-l-4 border-primary animate-pulse">
+                    <div class="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                        <div class="h-12 bg-gray-100 dark:bg-gray-800 rounded mt-3"></div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                    </div>
+                </div>
+                <div
+                    class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl shadow-sm flex gap-4 items-start border-l-4 border-primary animate-pulse">
+                    <div class="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                        <div class="h-12 bg-gray-100 dark:bg-gray-800 rounded mt-3"></div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .animate-pulse {
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+
+            @keyframes pulse {
+
+                0%,
+                100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
+            }
+        </style>
+
+    </main>
+
+    <script src="./notification.js"></script>
+
+</body>
+
+</html>

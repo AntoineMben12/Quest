@@ -408,6 +408,218 @@ app.put("/api/posts/:post_id/like", async (req, res) => {
   }
 });
 
+// Collaboration Post API endpoints
+// Create collaboration post
+app.post("/api/collaboration-posts", async (req, res) => {
+  try {
+    const { workspaceId, title, content, authorId, authorName, authorEmail, workspaceOwnerId } = req.body;
+
+    if (!workspaceId || !title || !content || !authorId || !authorName) {
+      return res.status(400).json({ message: "Required fields missing!" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+      const [result] = await connection.execute(
+        "INSERT INTO post_collaboration (workspace_id, title, content, author_id, author_name, author_email, workspace_owner_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
+        [workspaceId, title, content, authorId, authorName, authorEmail, workspaceOwnerId]
+      );
+
+      console.log("Collaboration post created with ID:", result.insertId);
+
+      res.status(201).json({
+        message: "Collaboration post created successfully!",
+        postId: result.insertId,
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Collaboration post creation error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Get collaboration posts for a workspace
+app.get("/api/collaboration-posts/:workspaceId", async (req, res) => {
+  try {
+    const { workspaceId } = req.params;
+
+    if (!workspaceId) {
+      return res.status(400).json({ message: "Workspace ID is required!" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+      const [posts] = await connection.execute(
+        "SELECT * FROM post_collaboration WHERE workspace_id = ? ORDER BY created_at DESC",
+        [workspaceId]
+      );
+
+      res.status(200).json({
+        message: "Collaboration posts retrieved successfully!",
+        posts: posts,
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Get collaboration posts error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Get notifications for a user (collaboration posts from their workspaces)
+app.get("/api/notifications/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required!" });
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+      // Get collaboration posts where user is the workspace owner
+      const [notifications] = await connection.execute(
+        "SELECT * FROM post_collaboration WHERE workspace_owner_id = ? ORDER BY created_at DESC LIMIT 50",
+        [userId]
+      );
+
+      res.status(200).json({
+        message: "Notifications retrieved successfully!",
+        notifications: notifications,
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Get notifications error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Delete collaboration post
+app.delete("/api/collaboration-posts/:postId", async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const connection = await pool.getConnection();
+
+    try {
+      const [result] = await connection.execute(
+        "DELETE FROM post_collaboration WHERE post_id = ?",
+        [postId]
+      );
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Post not found!" });
+      }
+
+      console.log("Collaboration post deleted with ID:", postId);
+
+      res.status(200).json({
+        message: "Collaboration post deleted successfully!",
+      });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Delete collaboration post error:", error);
+    res.status(500).json({ message: "Server error! Please try again." });
+  }
+});
+
+// Notifications API Endpoints
+
+// Create a notification (Generic)
+app.post("/api/notifications", async (req, res) => {
+  try {
+    const { userId, type, title, content } = req.body;
+
+    if (!userId || !type || !title) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+      const [result] = await connection.execute(
+        "INSERT INTO notifications (user_id, type, title, content) VALUES (?, ?, ?, ?)",
+        [userId, type, title, content]
+      );
+      res.status(201).json({ message: "Notification created", id: result.insertId });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Create notification error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Send Invite Notification (Lookup by email)
+app.post("/api/notifications/invite", async (req, res) => {
+  try {
+    const { email, workspaceName, inviterName } = req.body;
+
+    if (!email || !workspaceName || !inviterName) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+      // Find user by email
+      const [users] = await connection.execute(
+        "SELECT id FROM USERS WHERE email = ?",
+        [email]
+      );
+
+      if (users.length === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const userId = users[0].id;
+      const title = "New Workspace Invitation";
+      const content = `${inviterName} invited you to join the workspace "${workspaceName}"`;
+
+      const [result] = await connection.execute(
+        "INSERT INTO notifications (user_id, type, title, content) VALUES (?, ?, ?, ?)",
+        [userId, "invite", title, content]
+      );
+
+      res.status(201).json({ message: "Invite notification sent", id: result.insertId });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Invite notification error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Get notifications for a user
+app.get("/api/notifications/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const connection = await pool.getConnection();
+    try {
+      const [notifications] = await connection.execute(
+        "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50",
+        [userId]
+      );
+      res.status(200).json({ notifications });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error("Get notifications error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Server listening
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

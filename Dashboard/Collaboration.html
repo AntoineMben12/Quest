@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaboration - Questing</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#ADFF2F", // GreenYellow
+            "primary-dark": "#9ACD32", // YellowGreen
+            "background-light": "#f7f8f6",
+            "background-dark": "#1b2210",
+            "surface-light": "#ffffff",
+            "surface-dark": "#262f18",
+            "text-main": "#161b0d",
+            "text-light": "#ffffff",
+          },
+          fontFamily: {
+            display: ["Spline Sans", "sans-serif"],
+            body: ["Noto Sans", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      min-height: 100dvh;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    .workspace-card {
+      transition: all 0.3s ease;
+    }
+
+    .workspace-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-transition {
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased p-4 md:p-6">
+  <div class="max-w-6xl mx-auto">
+    <header class="mb-8 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="./Dashboard.html"
+          class="h-10 w-10 flex items-center justify-center rounded-full bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-gray-500">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+        </a>
+        <div>
+          <h1 class="text-3xl font-bold">Collaborations</h1>
+          <p class="text-sm text-gray-500 mt-1">Create and manage team workspaces</p>
+        </div>
+      </div>
+      <button id="create-workspace-btn"
+        class="rounded-xl bg-primary px-6 py-3 font-bold text-black hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl flex items-center gap-2 transform hover:scale-105">
+        <span class="material-symbols-outlined text-sm">add</span>
+        New Workspace
+      </button>
+    </header>
+
+    <!-- Modal: Create Workspace -->
+    <div id="create-workspace-modal"
+      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm p-4"
+      onclick="if(event.target === this) closeCreateWorkspaceModal()">
+      <div
+        class="bg-surface-light dark:bg-surface-dark rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100 dark:border-gray-800 modal-transition">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-bold">Create Workspace</h2>
+          <button type="button" onclick="closeCreateWorkspaceModal()"
+            class="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+        <form id="create-workspace-form" class="flex flex-col gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Workspace Name *</label>
+            <input id="workspace-name" placeholder="e.g., Product Team"
+              class="w-full rounded-xl px-4 py-3 border border-gray-200 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-primary focus:border-transparent dark:text-white"
+              required maxlength="100" />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</label>
+            <textarea id="workspace-desc" placeholder="What is this workspace about?" rows="3" maxlength="500"
+              class="w-full rounded-xl px-4 py-3 border border-gray-200 dark:border-gray-700 bg-transparent focus:ring-2 focus:ring-primary focus:border-transparent dark:text-white resize-none"></textarea>
+            <p class="text-xs text-gray-500 mt-1"><span id="desc-count">0</span>/500</p>
+          </div>
+          <div class="flex gap-3 justify-end mt-4">
+            <button type="button"
+              class="px-5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 font-medium transition-colors"
+              onclick="closeCreateWorkspaceModal()">Cancel</button>
+            <button type="submit"
+              class="px-6 py-2 rounded-xl bg-primary text-black font-bold hover:bg-primary-dark transition-all shadow-md hover:shadow-lg">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: View Workspace -->
+    <div id="workspace-modal"
+      class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 overflow-y-auto backdrop-blur-sm p-4"
+      onclick="if(event.target === this) closeWorkspaceModal()">
+      <div
+        class="bg-surface-light dark:bg-surface-dark rounded-2xl p-6 max-w-4xl w-full shadow-2xl border border-gray-100 dark:border-gray-800 my-6 modal-transition">
+        <div class="flex justify-between items-start mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
+          <div>
+            <h2 id="workspace-modal-name" class="text-2xl font-bold mb-2"></h2>
+            <p class="text-sm text-gray-500">Collaborate with your team members</p>
+          </div>
+          <button type="button" onclick="closeWorkspaceModal()"
+            class="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- Sidebar -->
+          <div class="lg:col-span-1 space-y-6">
+            <!-- Members Section -->
+            <div class="bg-background-light dark:bg-background-dark rounded-xl p-4">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-sm uppercase text-gray-600 dark:text-gray-400 tracking-wide">Team Members</h3>
+                <span class="text-xs bg-primary text-black px-2 py-1 rounded-full font-semibold" id="members-count">0</span>
+              </div>
+              <div id="workspace-members" class="space-y-2"></div>
+
+              <button onclick="document.getElementById('invite-section').classList.toggle('hidden')"
+                class="mt-4 w-full py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">person_add</span>
+                Invite Member
+              </button>
+            </div>
+
+            <!-- Invite Section -->
+            <div id="invite-section" class="hidden bg-background-light dark:bg-background-dark rounded-xl p-4 space-y-3">
+              <h4 class="font-semibold text-sm">Invite by Email</h4>
+              <form id="invite-form" class="flex flex-col gap-2">
+                <input id="invite-email" placeholder="user@example.com" type="email"
+                  class="rounded-lg px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-transparent dark:text-white focus:ring-2 focus:ring-primary" />
+                <button type="submit"
+                  class="rounded-lg bg-primary text-black py-2 text-sm font-bold hover:bg-primary-dark transition-colors">Send Invite</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="lg:col-span-3 space-y-6">
+            <!-- Post Form -->
+            <div class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+              <form id="collab-post-form" class="flex flex-col gap-4">
+                <div>
+                  <input id="collab-post-title" placeholder="What's on your mind?" maxlength="255"
+                    class="w-full bg-transparent border-none p-0 text-lg font-bold focus:ring-0 placeholder-gray-400 dark:text-white" />
+                </div>
+                <div>
+                  <textarea id="collab-post-content" placeholder="Share your thoughts, updates, or ideas..." rows="3" maxlength="5000"
+                    class="w-full bg-transparent border-none p-0 resize-none focus:ring-0 placeholder-gray-400 dark:text-white text-sm"></textarea>
+                </div>
+                <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <p class="text-xs text-gray-500"><span id="content-count">0</span>/5000</p>
+                  <button type="submit"
+                    class="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-black hover:bg-primary-dark transition-colors shadow-md hover:shadow-lg">Post</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Posts Section -->
+            <div>
+              <h3 class="font-bold text-sm uppercase text-gray-600 dark:text-gray-400 mb-4 tracking-wide">Recent Activity</h3>
+              <div id="workspace-posts" class="space-y-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workspaces List -->
+    <div id="workspaces-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </div>
+
+  <!-- Character count tracker -->
+  <script>
+    document.addEventListener('input', (e) => {
+      if (e.target.id === 'workspace-desc') {
+        document.getElementById('desc-count').textContent = e.target.value.length;
+      }
+      if (e.target.id === 'collab-post-content') {
+        document.getElementById('content-count').textContent = e.target.value.length;
+      }
+    });
+  </script>
+
+  <script src="./Collaboration.js"></script>
+</body>
+
+</html>

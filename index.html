@@ -19,8 +19,8 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#ADFF2F",
-                        "primary-dark": "#9ACD32",
+                        primary: "#ADFF2F", // GreenYellow
+                        "primary-dark": "#9ACD32", // YellowGreen
                         "background-light": "#f7f8f6",
                         "background-dark": "#1b2210",
                         "surface-light": "#ffffff",
@@ -40,82 +40,156 @@
         .material-symbols-outlined {
             font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
         }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
     </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased">
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main dark:text-text-light font-display antialiased selection:bg-primary selection:text-black">
+
+    <!-- Navigation Header -->
+    <header
+        class="fixed top-0 w-full z-50 bg-surface-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50">
+        <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div
+                    class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-black shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-xl">article</span>
+                </div>
+                <span class="font-bold text-xl tracking-tight">Questing</span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-medium hover:text-primary transition-colors">Home</a>
+                <a href="./Dashboard/Dashboard.html"
+                    class="text-sm font-medium hover:text-primary transition-colors">Dashboard</a>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="flex items-center gap-3">
+                <a href="./Auth/Login/Login.html"
+                    class="hidden sm:flex px-4 py-2 text-sm font-semibold text-text-main dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors">
+                    Log in
+                </a>
+                <a href="./Auth/SignUp/SignUp.html"
+                    class="px-4 py-2 text-sm font-bold bg-primary text-black rounded-lg hover:bg-primary-dark shadow-sm shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-95">
+                    Sign up
+                </a>
+            </div>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
-        <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10" style="
-        background-image: radial-gradient(#adff2f 1px, transparent 1px);
-        background-size: 30px 30px;
-      "></div>
+    <section class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden pt-16">
+        <!-- Animated Background Pattern -->
+        <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style="
+            background-image: radial-gradient(#adff2f 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        "></div>
+
+        <!-- Floating Blobs -->
+        <div class="absolute top-1/4 -left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 -right-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s;"></div>
 
         <div class="relative z-10 text-center max-w-4xl mx-auto">
-            <!-- Logo/Icon -->
+            <!-- Logo/Icon Animation -->
             <div class="mb-8 flex justify-center">
                 <div
-                    class="h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-2xl shadow-primary/20">
-                    <span class="material-symbols-outlined text-white text-5xl">article</span>
+                    class="h-24 w-24 rounded-3xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-2xl shadow-primary/30 animate-float">
+                    <span class="material-symbols-outlined text-black text-5xl">article</span>
                 </div>
             </div>
 
             <!-- Title -->
-            <h1 class="text-6xl md:text-7xl font-bold mb-6 text-text-main dark:text-white">
-                Welcome to <span class="text-primary">Questing</span>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-text-main dark:text-white tracking-tight leading-tight">
+                Welcome to <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-green-400">Questing</span>
             </h1>
 
             <!-- Subtitle -->
-            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-                Share your thoughts, connect with others, and explore amazing content from our community
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                A simple, elegant place to share your thoughts, connect with others, and explore amazing content in a
+                distraction-free environment.
             </p>
 
             <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="../Post/post.html"
-                    class="px-8 py-4 rounded-xl bg-primary text-black font-bold text-lg shadow-lg shadow-primary/20 hover:bg-primary-dark active:scale-95 transition-all">
-                    <span class="flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined">explore</span>
-                        Explore Posts
-                    </span>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="./Dashboard/Dashboard.html"
+                    class="px-8 py-4 rounded-2xl bg-primary text-black font-bold text-lg hover:bg-primary-dark transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 w-full sm:w-auto">
+                    Get Started
                 </a>
-                <a href="../Dashboard/Dashboard.html"
-                    class="px-8 py-4 rounded-xl bg-surface-light dark:bg-surface-dark text-text-main dark:text-white font-bold text-lg border-2 border-primary/20 hover:border-primary transition-all">
-                    <span class="flex items-center justify-center gap-2">
-                        <span class="material-symbols-outlined">dashboard</span>
-                        Go to Dashboard
-                    </span>
+                <a href="./Post/post.html"
+                    class="px-8 py-4 rounded-2xl bg-surface-light dark:bg-surface-dark text-text-main dark:text-white font-bold text-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5 transition-all hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">explore</span>
+                    Explore Posts
                 </a>
             </div>
 
             <!-- Features -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
-                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">create</span>
-                    <h3 class="font-bold text-lg mb-2">Create Posts</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Share your ideas and stories with the community
-                    </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 w-full text-left">
+                <div
+                    class="group p-6 rounded-3xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
+                    <div
+                        class="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 text-primary-dark dark:text-primary group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">create</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Create</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Share your ideas with the world using our
+                        intuitive editor.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">favorite</span>
-                    <h3 class="font-bold text-lg mb-2">Like & Engage</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Support posts you love and connect with others
-                    </p>
+                <div
+                    class="group p-6 rounded-3xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
+                    <div
+                        class="h-12 w-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">favorite</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Connect</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Engage with a vibrant community through likes
+                        and collaborations.</p>
                 </div>
-                <div class="p-6 rounded-2xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur">
-                    <span class="material-symbols-outlined text-primary text-4xl mb-3 block">search</span>
-                    <h3 class="font-bold text-lg mb-2">Discover Content</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Find posts that match your interests easily</p>
+                <div
+                    class="group p-6 rounded-3xl bg-surface-light/50 dark:bg-surface-dark/50 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:border-primary/50 transition-all hover:shadow-xl hover:shadow-primary/5">
+                    <div
+                        class="h-12 w-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">search</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Discover</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Find content that matters to you with our
+                        curated feeds.</p>
                 </div>
             </div>
         </div>
     </section>
-
+    <br>
     <!-- Footer -->
-    <footer class="bg-surface-light dark:bg-surface-dark text-center py-6 text-sm text-gray-500">
-        <p>&copy; All rights reserved <span id="current-year"></span> - Questing</p>
+    <footer
+        class="bg-surface-light dark:bg-surface-dark text-center py-8 text-sm text-gray-500 border-t border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-center gap-2 mb-4 opacity-50">
+                <span class="material-symbols-outlined text-lg">article</span>
+                <span class="font-bold">Questing</span>
+            </div>
+            <p>&copy; <span id="current-year"></span> All rights reserved.</p>
+        </div>
     </footer>
 
     <script>
