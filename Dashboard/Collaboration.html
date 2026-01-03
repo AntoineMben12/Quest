@@ -52,12 +52,13 @@
     }
 
     .workspace-card {
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
 
     .workspace-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: rgba(173, 255, 47, 0.5);
     }
 
     .modal-transition {
@@ -68,6 +69,7 @@
       from {
         opacity: 0;
       }
+
       to {
         opacity: 1;
       }
@@ -85,12 +87,12 @@
           <span class="material-symbols-outlined text-sm">arrow_back</span>
         </a>
         <div>
-          <h1 class="text-3xl font-bold">Collaborations</h1>
+          <h1 class="text-2xl font-bold">Collaborations</h1>
           <p class="text-sm text-gray-500 mt-1">Create and manage team workspaces</p>
         </div>
       </div>
       <button id="create-workspace-btn"
-        class="rounded-xl bg-primary px-6 py-3 font-bold text-black hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl flex items-center gap-2 transform hover:scale-105">
+        class="rounded-lg bg-primary px-4 py-2 font-bold text-black hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-sm">
         <span class="material-symbols-outlined text-sm">add</span>
         New Workspace
       </button>
@@ -103,7 +105,7 @@
       <div
         class="bg-surface-light dark:bg-surface-dark rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100 dark:border-gray-800 modal-transition">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-2xl font-bold">Create Workspace</h2>
+          <h2 class="text-xl font-bold">Create Workspace</h2>
           <button type="button" onclick="closeCreateWorkspaceModal()"
             class="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
             <span class="material-symbols-outlined text-sm">close</span>
@@ -127,7 +129,7 @@
               class="px-5 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 font-medium transition-colors"
               onclick="closeCreateWorkspaceModal()">Cancel</button>
             <button type="submit"
-              class="px-6 py-2 rounded-xl bg-primary text-black font-bold hover:bg-primary-dark transition-all shadow-md hover:shadow-lg">Create</button>
+              class="px-6 py-2 rounded-xl bg-primary text-black font-bold hover:bg-primary-dark transition-colors shadow-sm">Create</button>
           </div>
         </form>
       </div>
@@ -154,10 +156,12 @@
           <!-- Sidebar -->
           <div class="lg:col-span-1 space-y-6">
             <!-- Members Section -->
-            <div class="bg-background-light dark:bg-background-dark rounded-xl p-4">
+            <div
+              class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-100 dark:border-gray-700">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="font-bold text-sm uppercase text-gray-600 dark:text-gray-400 tracking-wide">Team Members</h3>
-                <span class="text-xs bg-primary text-black px-2 py-1 rounded-full font-semibold" id="members-count">0</span>
+                <span class="text-xs bg-primary text-black px-2 py-1 rounded-full font-semibold"
+                  id="members-count">0</span>
               </div>
               <div id="workspace-members" class="space-y-2"></div>
 
@@ -169,13 +173,15 @@
             </div>
 
             <!-- Invite Section -->
-            <div id="invite-section" class="hidden bg-background-light dark:bg-background-dark rounded-xl p-4 space-y-3">
+            <div id="invite-section"
+              class="hidden bg-background-light dark:bg-background-dark rounded-xl p-4 space-y-3 border border-gray-100 dark:border-gray-700">
               <h4 class="font-semibold text-sm">Invite by Email</h4>
               <form id="invite-form" class="flex flex-col gap-2">
                 <input id="invite-email" placeholder="user@example.com" type="email"
                   class="rounded-lg px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 bg-transparent dark:text-white focus:ring-2 focus:ring-primary" />
                 <button type="submit"
-                  class="rounded-lg bg-primary text-black py-2 text-sm font-bold hover:bg-primary-dark transition-colors">Send Invite</button>
+                  class="rounded-lg bg-primary text-black py-2 text-sm font-bold hover:bg-primary-dark transition-colors">Send
+                  Invite</button>
               </form>
             </div>
           </div>
@@ -183,27 +189,30 @@
           <!-- Main Content -->
           <div class="lg:col-span-3 space-y-6">
             <!-- Post Form -->
-            <div class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+            <div
+              class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-700">
               <form id="collab-post-form" class="flex flex-col gap-4">
                 <div>
                   <input id="collab-post-title" placeholder="What's on your mind?" maxlength="255"
                     class="w-full bg-transparent border-none p-0 text-lg font-bold focus:ring-0 placeholder-gray-400 dark:text-white" />
                 </div>
                 <div>
-                  <textarea id="collab-post-content" placeholder="Share your thoughts, updates, or ideas..." rows="3" maxlength="5000"
+                  <textarea id="collab-post-content" placeholder="Share your thoughts, updates, or ideas..." rows="3"
+                    maxlength="5000"
                     class="w-full bg-transparent border-none p-0 resize-none focus:ring-0 placeholder-gray-400 dark:text-white text-sm"></textarea>
                 </div>
                 <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
                   <p class="text-xs text-gray-500"><span id="content-count">0</span>/5000</p>
                   <button type="submit"
-                    class="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-black hover:bg-primary-dark transition-colors shadow-md hover:shadow-lg">Post</button>
+                    class="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-black hover:bg-primary-dark transition-colors shadow-sm">Post</button>
                 </div>
               </form>
             </div>
 
             <!-- Posts Section -->
             <div>
-              <h3 class="font-bold text-sm uppercase text-gray-600 dark:text-gray-400 mb-4 tracking-wide">Recent Activity</h3>
+              <h3 class="font-bold text-sm uppercase text-gray-600 dark:text-gray-400 mb-4 tracking-wide">Recent
+                Activity</h3>
               <div id="workspace-posts" class="space-y-4"></div>
             </div>
           </div>

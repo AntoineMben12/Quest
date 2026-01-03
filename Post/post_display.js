@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", function () {
     loadAllPosts();
     setupSearch();
     setCurrentYear();
+    setupSidebar();
 });
 
 // Store all posts for search functionality
 let allPosts = [];
 let displayedPosts = [];
+let currentSidebarPostId = null;
 
 // Load all posts from server
 function loadAllPosts() {
@@ -276,13 +278,22 @@ function setCurrentYear() {
 
 // Toggle comments section
 function toggleComments(postId) {
-    const section = document.getElementById(`comments-section-${postId}`);
-    if (section.classList.contains("hidden")) {
-        section.classList.remove("hidden");
-        loadComments(postId);
-    } else {
-        section.classList.add("hidden");
+    currentSidebarPostId = postId;
+    const post = allPosts.find(p => p.post_id === postId);
+    
+    // Set sidebar title to the post title
+    if (post) {
+        document.getElementById("comments-sidebar-title").textContent = `Comments on "${post.title}"`;
     }
+    
+    // Show sidebar
+    const sidebar = document.getElementById("comments-sidebar");
+    const overlay = document.getElementById("comments-sidebar-overlay");
+    sidebar.classList.remove("translate-x-full");
+    overlay.classList.remove("hidden");
+    
+    // Load comments
+    loadCommentsSidebar(postId);
 }
 
 // Load comments for a post
@@ -426,4 +437,173 @@ function escapeHtml(text) {
         "'": "&#039;",
     };
     return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+// Setup sidebar functionality
+function setupSidebar() {
+    const sidebar = document.getElementById("comments-sidebar");
+    const overlay = document.getElementById("comments-sidebar-overlay");
+    const closeBtn = document.getElementById("comments-sidebar-close");
+    const submitBtn = document.getElementById("comment-submit-sidebar");
+    
+    // Close button
+    closeBtn.addEventListener("click", closeSidebar);
+    
+    // Overlay click to close
+    overlay.addEventListener("click", closeSidebar);
+    
+    // Submit comment button
+    submitBtn.addEventListener("click", submitCommentSidebar);
+    
+    // Enter key to submit (Shift+Enter for new line)
+    document.getElementById("comment-input-sidebar").addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            submitCommentSidebar();
+        }
+    });
+}
+
+// Close sidebar
+function closeSidebar() {
+    const sidebar = document.getElementById("comments-sidebar");
+    const overlay = document.getElementById("comments-sidebar-overlay");
+    sidebar.classList.add("translate-x-full");
+    overlay.classList.add("hidden");
+    currentSidebarPostId = null;
+}
+
+// Load comments into sidebar
+function loadCommentsSidebar(postId) {
+    const commentsList = document.getElementById("comments-sidebar-list");
+    const commentCount = document.getElementById(`comment-count-${postId}`);
+    commentsList.innerHTML = '<p class="text-sm text-gray-500 text-center py-4">Loading comments...</p>';
+    
+    fetch(`http://localhost:3000/api/comments/${postId}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const comments = data.comments || [];
+            const user = JSON.parse(localStorage.getItem("user"));
+            
+            // Update comment count badge on the post card
+            if (commentCount) {
+                commentCount.textContent = comments.length;
+            }
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<p class="text-sm text-gray-500 text-center py-4">No comments yet. Be the first!</p>';
+                return;
+            }
+            
+            commentsList.innerHTML = comments
+                .map((comment) => {
+                    const isOwnComment = user && comment.user_id === user.id;
+                    return `
+                    <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                      <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-semibold text-text-main dark:text-white">${comment.name}</p>
+                          <p class="text-xs text-gray-500 mb-1">${getTimeAgo(comment.created_at)}</p>
+                          <p class="text-sm text-gray-700 dark:text-gray-300 break-words">${escapeHtml(comment.comment_text)}</p>
+                        </div>
+                        ${isOwnComment ? `
+                        <button onclick="deleteCommentSidebar(${comment.comment_id})" class="text-gray-400 hover:text-red-500 transition-colors flex-shrink-0" title="Delete comment">
+                          <span class="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                        ` : ''}
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("");
+        })
+        .catch((error) => {
+            console.error("Error loading comments:", error);
+            commentsList.innerHTML = '<p class="text-sm text-red-500 text-center py-4">Error loading comments</p>';
+        });
+}
+
+// Submit comment from sidebar
+function submitCommentSidebar() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login to comment!");
+        window.location.href = "../Auth/Login/Login.html";
+        return;
+    }
+    
+    if (!currentSidebarPostId) {
+        alert("No post selected!");
+        return;
+    }
+    
+    const commentInput = document.getElementById("comment-input-sidebar");
+    const commentText = commentInput.value.trim();
+    
+    if (!commentText) {
+        alert("Comment cannot be empty!");
+        return;
+    }
+    
+    fetch("http://localhost:3000/api/comments", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            post_id: currentSidebarPostId,
+            user_id: user.id,
+            comment_text: commentText,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message.includes("successfully")) {
+                commentInput.value = "";
+                loadCommentsSidebar(currentSidebarPostId);
+            } else {
+                alert(data.message || "Error posting comment!");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to post comment!");
+        });
+}
+
+// Delete comment from sidebar
+function deleteCommentSidebar(commentId) {
+    if (!confirm("Are you sure you want to delete this comment?")) {
+        return;
+    }
+    
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login to delete comments!");
+        return;
+    }
+    
+    fetch(`http://localhost:3000/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            user_id: user.id,
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.message.includes("successfully")) {
+                if (currentSidebarPostId) {
+                    loadCommentsSidebar(currentSidebarPostId);
+                }
+            } else {
+                alert(data.message || "Error deleting comment!");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to delete comment!");
+        });
 }

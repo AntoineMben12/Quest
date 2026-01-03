@@ -169,6 +169,27 @@
         document.getElementById("current-year").textContent = new Date().getFullYear();
     </script>
 
+    <!-- Comments Sidebar (off-canvas) -->
+    <div id="comments-sidebar-overlay" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+    <aside id="comments-sidebar" class="fixed right-0 top-0 h-full w-full md:w-96 bg-surface-light dark:bg-surface-dark z-50 transform translate-x-full transition-transform shadow-lg">
+        <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 id="comments-sidebar-title" class="text-lg font-bold text-text-main dark:text-white">Comments</h3>
+            <button id="comments-sidebar-close" class="text-gray-500 hover:text-gray-800 dark:hover:text-white">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-4 flex flex-col h-[calc(100%-64px)]">
+            <div id="comments-sidebar-list" class="flex-1 overflow-y-auto mb-4 px-1">
+                <p class="text-sm text-gray-500 text-center py-4">Select a post to view comments</p>
+            </div>
+            <div id="comments-sidebar-form" class="pt-2">
+                <textarea id="comment-input-sidebar" placeholder="Add a comment..." maxlength="500" rows="3"
+                    class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark text-text-main dark:text-white placeholder-gray-400 text-sm focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                <button id="comment-submit-sidebar" class="mt-2 px-4 py-2 rounded-lg bg-primary text-black font-semibold hover:bg-primary-dark transition-colors text-sm w-full">Post Comment</button>
+            </div>
+        </div>
+    </aside>
+
 </body>
 
 </html>
