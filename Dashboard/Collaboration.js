@@ -555,7 +555,7 @@ function renderWorkspaceModal(wsId) {
         </div>
       `;
     }).join('');
-    
+
     // Attach event listeners to delete buttons
     postsDiv.querySelectorAll('.delete-post-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {

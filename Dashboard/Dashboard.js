@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const user = JSON.parse(userJSON);
   initializeDashboard(user);
   setupPostForm();
+  setupMobileDrawer();
   setCurrentYear();
 });
 
@@ -83,6 +84,58 @@ function setupPostForm() {
       }
     });
   }
+}
+
+// Setup mobile drawer functionality
+function setupMobileDrawer() {
+  const drawerToggle = document.getElementById("drawer-toggle");
+  const navLinks = document.querySelectorAll("aside nav a");
+  const overlay = document.querySelector('label[for="drawer-toggle"]');
+
+  if (!drawerToggle) return;
+
+  // Auto-close drawer when clicking navigation links on mobile
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function () {
+      // Only auto-close on mobile (screens smaller than lg breakpoint)
+      if (window.innerWidth < 1024) {
+        drawerToggle.checked = false;
+      }
+    });
+  });
+
+  // Close drawer when clicking overlay
+  if (overlay) {
+    overlay.addEventListener("click", function () {
+      drawerToggle.checked = false;
+    });
+  }
+
+  // Close drawer on Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && drawerToggle.checked) {
+      drawerToggle.checked = false;
+    }
+  });
+
+  // Prevent body scroll when drawer is open on mobile
+  drawerToggle.addEventListener("change", function () {
+    if (window.innerWidth < 1024) {
+      if (this.checked) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    }
+  });
+
+  // Reset body scroll on window resize
+  window.addEventListener("resize", function () {
+    if (window.innerWidth >= 1024) {
+      document.body.style.overflow = "";
+      drawerToggle.checked = false;
+    }
+  });
 }
 
 // Create new post

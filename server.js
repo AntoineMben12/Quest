@@ -1,11 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
 const path = require("path");
-const bcrypt = require("bcrypt");
+// bcrypt removed - passwords stored in plain text
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -14,12 +15,12 @@ app.use(express.static(path.join(__dirname)));
 
 // MySQL connection pool
 const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "questing",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: process.env.DB_CONNECTION_LIMIT || 10,
   queueLimit: 0,
 });
 
@@ -57,13 +58,11 @@ app.post("/api/signup", async (req, res) => {
         return res.status(400).json({ message: "Email already registered!" });
       }
 
-      // Hash the password with bcrypt (10 salt rounds)
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Insert new user
+      // WARNING: Storing password in plain text (NOT SECURE)
+      // Insert new user with plain text password
       const [result] = await connection.execute(
         "INSERT INTO USERS (name, email, password) VALUES (?, ?, ?)",
-        [name, email, hashedPassword]
+        [name, email, password]
       );
 
       console.log("New user created:", name, "with ID:", result.insertId);
@@ -107,10 +106,8 @@ app.post("/api/login", async (req, res) => {
 
       const user = users[0];
 
-      // Compare password with hashed password using bcrypt
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      
-      if (!passwordMatch) {
+      // WARNING: Comparing plain text passwords (NOT SECURE)
+      if (password !== user.password) {
         return res.status(401).json({ message: "Invalid email or password!" });
       }
 
