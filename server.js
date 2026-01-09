@@ -6,7 +6,7 @@ const path = require("path");
 // bcrypt removed - passwords stored in plain text
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3306;
 // const PORT = 3000;
 // Middleware
 app.use(cors());
