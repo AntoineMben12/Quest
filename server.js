@@ -3,7 +3,7 @@ const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
 const path = require("path");
-// bcrypt removed - passwords stored in plain text
+
 
 const app = express();
 const PORT = process.env.PORT || 3306;
